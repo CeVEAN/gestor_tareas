@@ -7,8 +7,8 @@ class AuthService {
 
   Stream<AuthState> get authChanges => _client.auth.onAuthStateChange;
 
-  Future<void> signUp(String email, String password) async {
-    await _client.auth.signUp(email: email, password: password);
+  Future<AuthResponse> signUp(String email, String password) async {
+    return _client.auth.signUp(email: email, password: password);
   }
 
   Future<void> signIn(String email, String password) async {

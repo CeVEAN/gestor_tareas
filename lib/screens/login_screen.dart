@@ -39,7 +39,13 @@ class _LoginScreenState extends State<LoginScreen> {
       if (_isLogin) {
         await _authService.signIn(email, password);
       } else {
-        await _authService.signUp(email, password);
+        final result = await _authService.signUp(email, password);
+        if (result.session == null && mounted) {
+          setState(() => _isLogin = true);
+          _showMessage(
+            'Si el registro fue aceptado, revisa tu correo para confirmar la cuenta y luego inicia sesión.',
+          );
+        }
       }
     } on AuthException catch (e) {
       _showMessage(e.message);
