@@ -24,4 +24,28 @@ class BoardService {
       'user_id': user.id,
     });
   }
+
+  Future<void> rename(Board board, String name) async {
+    final user = _client.auth.currentUser;
+    if (user == null) throw StateError('Debes iniciar sesión');
+    final rows = await _client
+        .from('boards')
+        .update({'name': name.trim()})
+        .eq('id', board.id)
+        .eq('user_id', user.id)
+        .select('id');
+    if (rows.isEmpty) throw StateError('No se pudo actualizar el tablero');
+  }
+
+  Future<void> delete(Board board) async {
+    final user = _client.auth.currentUser;
+    if (user == null) throw StateError('Debes iniciar sesión');
+    final rows = await _client
+        .from('boards')
+        .delete()
+        .eq('id', board.id)
+        .eq('user_id', user.id)
+        .select('id');
+    if (rows.isEmpty) throw StateError('No se pudo eliminar el tablero');
+  }
 }
